@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "bitset": "cpp",
+    "initializer_list": "cpp",
+    "memory": "cpp",
+    "string": "cpp",
+    "utility": "cpp",
+    "ostream": "cpp"
+  }
+}

@@ -1,0 +1,9 @@
+.DS_Store
+
+misc
+payment\ records
+MTH111
+
+**/*.pdf
+**/*.pages
+**/*.zip

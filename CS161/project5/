@@ -1,0 +1,64 @@
+/****
+ * Author: Patrick Moore
+ * Date: July 19, 2017
+ * Description: Box class implementation.
+ * ****/
+
+#include "Box.hpp"
+
+void Box::Box(double h = 1, double w = 1, double l = 1)
+{
+  height = h;
+  width = w;
+  length = l;
+}
+
+bool Box::setHeight(double h)
+{
+  bool valid = true;
+  
+  if (h >= 0)
+    height = h;
+  else 
+    valid = false;
+
+  return valid; 
+}
+
+bool Box::setWidth(double w)
+{
+  bool valid = true;
+
+  if (w >= 0)
+    width = w;
+  else
+    valid = false;
+
+  return valid;
+}
+
+bool Box::setLength(double l)
+{
+  bool valid = true;
+
+  if (l >= 0)
+    length = l;
+  else
+    valid = false;
+
+  return valid;
+} 
+
+double Box::calcVolume()
+{
+  return height * width * length;
+}
+
+double Box::calcSurfaceArea()
+{
+  
+
+  return  
+}
+
+
