@@ -4,6 +4,8 @@ misc
 payment\ records
 MTH111
 
+.vscode
+
 **/*.pdf
 **/*.pages
 **/*.zip
