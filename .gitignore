@@ -6,6 +6,8 @@ MTH111
 
 .vscode
 
+**/*.o
+
 **/*.pdf
 **/*.pages
 **/*.docx
