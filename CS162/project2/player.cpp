@@ -26,7 +26,7 @@ double Player::getBankRoll()
 /**
  * Description: 
  * */
-bool Player::widthdraw(double amount)
+bool Player::withdraw(double amount)
 {
   if (this->bankRoll > amount)
   {

@@ -11,7 +11,11 @@
 
 class Turtle : public Animal
 {
-  
+  private:
+   double foodCost;
+  public:
+    Turtle(Age);
+    double getFoodCost();
 };
 
 #endif

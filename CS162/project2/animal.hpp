@@ -7,16 +7,24 @@
 #ifndef ANIMAL_HPP
 #define ANIMAL_HPP
 
+enum Age{Baby, New, Adult = 3};
+
 class Animal
 {
   private:
-    int age = 1;
-    int const babyQty;
-    int const payoff;
-    double const cost;
-    double const foodCost;
+    int age;
+    int numberOfBabies;
+    double payoff;
+    double cost;
+    double baseFoodCost = 10.00;
   public:
-    Animal();
+    Animal(int, int, double, double);
+    void increaseAge();
+    bool isAdult();
+    int getNumberOfBabies();
+    double getPayoff();
+    double getCost();
+    double getBaseFoodCost();
 };
 
 #endif

@@ -14,7 +14,7 @@ class Player
   public:
     Player();
     double getBankRoll();
-    bool widthdraw(double);
+    bool withdraw(double);
     void deposit(double);
 };
 

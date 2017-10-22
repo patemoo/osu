@@ -11,7 +11,11 @@
 
 class Tiger : public Animal
 {
-
+  private:
+    double foodCost;
+  public: 
+    Tiger(Age);
+    double getFoodCost();
 };
 
 #endif

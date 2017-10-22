@@ -6,6 +6,10 @@
 
 #include "player.hpp"
 #include "menu.hpp"
+#include "validate.hpp"
+#include "tiger.hpp"
+#include "zoo.hpp"
+#include "random.hpp"
 
 #include <iostream>
 using std::cout;
@@ -16,36 +20,111 @@ using std::cin;
 using std::rand;
 
 
-void randomEvent(int, int, int);
-void sicknessDeath();
-void attendanceBoom();
-void babyBoom();
+void calcAndWithdrawFoodCost(Player &, Zoo &);
+void calcAndDepositProfit(Player &, Zoo &, int);
+
 
 int main()
 {
   bool playing = true;
+  int dayCount = 1;
   Player tycoon;
-  int tigerCount = 0;
-  int penguinCount = 0;
-  int turtleCount = 0;
+  int initialCount = 0;
 
   cout << "Welcome to Zoo Tycoon!" << endl;
-  cout << "You have just become the own of your very own zoo." << endl;
-  cout << "You currently have $" << tycoon.getBankRoll() << endl;
+  cout << "You have just become the proud owner of a brand new zoo." << endl;
+  cout << "You currently have $" << tycoon.getBankRoll() << " in the bank." << endl;
 
-  cout << "You need to purchase a vew animals to put on display." << endl;
-  cout << "" << endl; 
+  // Create zoo instance.
+  Zoo zoo;
 
-  
+  // prompt user to pick quantity of initial animals.
+  cout << "You need to purchase a few animals to get things going." << endl;
+  cout << "Would you like to start with 1 or 2 tigers? ($10,000.00)" << endl;
+  cinValidInt(initialCount, 1, 2);
+  zoo.addAnimal(TIGER, initialCount, Age::New);
+  double tigerCost = zoo.getTigers()[0].getCost();
+
+  cout << "Would you like to start with 1 or 2 penguins? ($1,000.00)" << endl;
+  cinValidInt(initialCount, 1, 2);
+  zoo.addAnimal(PENGUIN, initialCount, Age::New);
+  double penguinCost = zoo.getPenguins()[0].getCost();
+
+  cout << "Would you like to start with 1 or 2 turtles? ($100.00)" << endl; 
+  cinValidInt(initialCount, 1, 2);
+  zoo.addAnimal(TURTLE, initialCount, Age::New);
+  double turtleCost = zoo.getTurtles()[0].getCost();
+
+  // subtract these initial purchases from the bankRoll.
+  tycoon.withdraw(static_cast<double>(zoo.getAnimalCount(TIGER)) * tigerCost);
+  tycoon.withdraw(static_cast<double>(zoo.getAnimalCount(PENGUIN)) * penguinCost);
+  tycoon.withdraw(static_cast<double>(zoo.getAnimalCount(TURTLE)) * turtleCost);
+
+  cout << "Your animals have been purchased." << endl;
+  cout << "Your remaining bank balance is $" << tycoon.getBankRoll() << endl;
+
+
 
   // Day loop
   while (playing)
   {
+    cout << "\nDay: " << dayCount << endl;
 
+    double bonus = 0;
 
-    randomEvent(tigerCount, penguinCount, turtleCount);
+    // increase all animals age
+    zoo.increaseAgeOnAll();
 
+    // Pay for feed.
+    calcAndWithdrawFoodCost(tycoon, zoo);
+    cout << "After feeding all animals, your bank blance is $" << tycoon.getBankRoll() << endl;
 
+    // random event
+    bonus = randomEvent(zoo);
+
+    // calc profit
+    calcAndDepositProfit(tycoon, zoo, bonus);
+    cout << "After depositing profit, your bank blance is $" << tycoon.getBankRoll() << endl;
+
+    cout << endl;
+
+    // prompt user to by adult animal
+    cout << "Would you like to buy an adult animal?" << endl;
+    vector<string> newAdultOptoins{"Tiger ($10,000.00)", "Penguin ($1,000.00)", "Turtle ($100.00)", "No Thanks."};
+    string newAnimal;
+    int newAdultSelection = menu(newAdultOptoins);
+    switch (newAdultSelection)
+    {
+      case 1:
+        zoo.addAnimal(TIGER, 1, Age::Adult);
+        tycoon.withdraw(zoo.getTigers()[0].getCost());
+        newAnimal = "tiger";
+        break;
+      case 2:
+        zoo.addAnimal(PENGUIN, 1, Age::Adult);
+        tycoon.withdraw(zoo.getPenguins()[0].getCost());
+        newAnimal = "penguin";
+        break;
+      case 3:
+        zoo.addAnimal(TURTLE, 1, Age::Adult);
+        tycoon.withdraw(zoo.getTurtles()[0].getCost());
+        newAnimal = "turtle";
+        break;
+    }
+    if (newAdultSelection != 4)
+    {
+      cout << "\nAn adult " << newAnimal << " has been added to your zoo." << endl;
+      cout << "Your remaining bank balance is $" << tycoon.getBankRoll() << endl;
+    } 
+
+    cout << endl;
+
+    cout << "Animal count: " << endl;
+    cout << "Tigers: " << zoo.getAnimalCount(TIGER) << endl;
+    cout << "Penguins: " << zoo.getAnimalCount(PENGUIN) << endl;
+    cout << "Turtles: " << zoo.getAnimalCount(TURTLE) << endl;
+
+    cout << endl;
 
     // prompt user to continue or end the game
     vector<string> continueOptions{"Keep playing", "End game"};
@@ -54,6 +133,7 @@ int main()
       playing = false;
     }
 
+    dayCount += 1;
   }
 
   cout << "Game over." << endl;
@@ -64,54 +144,52 @@ int main()
 
 
 /**
- * Description: Random event logic
+ * Description: 
  * */
-void randomEvent(int tiCount, int pCount, int tuCount)
+void calcAndWithdrawFoodCost(Player &tycoon, Zoo &zoo)
 {
-  int randomInt = random() % 4;
-  
-  enum Event {Sickness, AttendanceBoom, BabyBoom, Nothing};
+  double totalFoodCost = 0;
+  // add cost of food for all tigers
+  totalFoodCost += 
+  static_cast<double>(zoo.getAnimalCount(TIGER))
+  * zoo.getTigers()[0].getFoodCost();
+  // add cost of food for all penguins
+  totalFoodCost += 
+  static_cast<double>(zoo.getAnimalCount(PENGUIN))
+  * zoo.getPenguins()[0].getFoodCost();
+  // add cost of food for all turtles
+  totalFoodCost += 
+  static_cast<double>(zoo.getAnimalCount(TURTLE))
+  * zoo.getTurtles()[0].getFoodCost();
 
-  switch (randomInt)
-  {
-    case Event::Sickness:
-      sicknessDeath();
-      break;
-    case Event::AttendanceBoom:
-      attendanceBoom();
-      break;
-    case Event::BabyBoom:
-      babyBoom();
-      break;  
-    case Event::Nothing:
-      cout << "nothing" << endl;
-      break;
-  }
+  tycoon.withdraw(totalFoodCost);
 }
 
 
 /**
- * Description: Kill an animal at random
+ * Description:
  * */
-void sicknessDeath()
+void calcAndDepositProfit(Player &tycoon, Zoo &zoo, int bonus)
 {
-  cout << "sickness" << endl;
+  double totalProfit = 0;
+
+  // add profit from all tigers
+  totalProfit += 
+  static_cast<double>(zoo.getAnimalCount(TIGER))
+  * zoo.getTigers()[0].getPayoff();
+  // add profit from all penguins
+  totalProfit += 
+  static_cast<double>(zoo.getAnimalCount(PENGUIN))
+  * zoo.getPenguins()[0].getPayoff();
+  // add profit from all turtles
+  totalProfit += 
+  static_cast<double>(zoo.getAnimalCount(TURTLE))
+  * zoo.getTurtles()[0].getPayoff();
+
+  totalProfit += bonus;
+
+  cout << "Your profit for the day, including bonus, is $" << totalProfit << endl;
+  tycoon.deposit(totalProfit);
 }
 
 
-/**
- * Description: Pay out bonus
- * */
-void attendanceBoom()
-{
-  cout << "attendance" << endl;
-}
-
-
-/**
- * Description: Animal at random gives birth
- * */
-void babyBoom()
-{
-  cout << "baby" << endl;
-}
