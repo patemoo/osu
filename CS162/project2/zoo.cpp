@@ -63,22 +63,45 @@ int Zoo::removeRandomAnimal()
     case TIGER:
     {
       int tigerCount = this->getAnimalCount(TIGER);
-      int tigerIndex = rand() % tigerCount;
-      this->tigers.erase(this->tigers.begin() + tigerIndex);
+      if (tigerCount > 1)
+      {
+        int tigerIndex = rand() % tigerCount;
+        this->tigers.erase(this->tigers.begin() + tigerIndex);
+      }
+      else 
+      {
+        return 3;
+      }
+      
     }
     break;
     case PENGUIN:
     {
       int penguinCount = this->getAnimalCount(PENGUIN);
-      int penguinIndex = rand() % penguinCount;
-      this->penguins.erase(this->penguins.begin() + penguinIndex);
+      if (penguinCount > 1)
+      {
+        int penguinIndex = rand() % penguinCount;
+        this->penguins.erase(this->penguins.begin() + penguinIndex);
+      }
+      else 
+      {
+        return 3;
+      }
+      
     }  
     break;
     case TURTLE:
     {
       int turtleCount = this->getAnimalCount(TURTLE);
-      int turtleIndex = rand() % turtleCount;
-      this->turtles.erase(this->turtles.begin() + turtleIndex);
+      if (turtleCount > 1)
+      {
+        int turtleIndex = rand() % turtleCount;
+        this->turtles.erase(this->turtles.begin() + turtleIndex);
+      } 
+      else 
+      {
+        return 3;
+      }
     }
     break;
   }

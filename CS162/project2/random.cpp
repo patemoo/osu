@@ -59,6 +59,9 @@ void sicknessDeath(Zoo &zoo)
     case TURTLE:
       cout << "\nA turtle has died due to sickness.\n" << endl;
       break;
+    case 3:
+      normalDay();
+      break;
   }
 }
 

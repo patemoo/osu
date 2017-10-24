@@ -27,6 +27,7 @@ void calcAndDepositProfit(Player &, Zoo &, int);
 int main()
 {
   bool playing = true;
+  bool haveMoney = true;
   int dayCount = 1;
   Player tycoon;
   int initialCount = 0;
@@ -97,21 +98,21 @@ int main()
     {
       case 1:
         zoo.addAnimal(TIGER, 1, Age::Adult);
-        tycoon.withdraw(zoo.getTigers()[0].getCost());
+        haveMoney = tycoon.withdraw(zoo.getTigers()[0].getCost());
         newAnimal = "tiger";
         break;
       case 2:
         zoo.addAnimal(PENGUIN, 1, Age::Adult);
-        tycoon.withdraw(zoo.getPenguins()[0].getCost());
+        haveMoney = tycoon.withdraw(zoo.getPenguins()[0].getCost());
         newAnimal = "penguin";
         break;
       case 3:
         zoo.addAnimal(TURTLE, 1, Age::Adult);
-        tycoon.withdraw(zoo.getTurtles()[0].getCost());
+        haveMoney = tycoon.withdraw(zoo.getTurtles()[0].getCost());
         newAnimal = "turtle";
         break;
     }
-    if (newAdultSelection != 4)
+    if (newAdultSelection != 4 && haveMoney)
     {
       cout << "\nAn adult " << newAnimal << " has been added to your zoo." << endl;
       cout << "Your remaining bank balance is $" << tycoon.getBankRoll() << endl;
@@ -126,12 +127,22 @@ int main()
 
     cout << endl;
 
-    // prompt user to continue or end the game
-    vector<string> continueOptions{"Keep playing", "End game"};
-    if (menu(continueOptions) == 2)
+    // if you run out of money.
+    if (!haveMoney)
     {
-      playing = false;
+      cout << "You ran out of money!" << endl;
+      playing = haveMoney;
     }
+    else {
+      // prompt user to continue or end the game
+      vector<string> continueOptions{"Keep playing", "End game"};
+      if (menu(continueOptions) == 2)
+      {
+        playing = false;
+      }
+    }
+
+    
 
     dayCount += 1;
   }
