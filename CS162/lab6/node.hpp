@@ -1,7 +1,7 @@
 /**
  * Author: Patrick Moore
  * Date: Noverber 2, 2017
- * Description: 
+ * Description: Node struct interface
  * */
 
 #ifndef NODE_HPP
@@ -9,9 +9,12 @@
 
 struct Node 
 {
-  private:
-  
-
-}
+  int val;
+  Node *next;
+  Node *prev;
+  Node(int);
+  Node(int, Node *);
+  Node(int, Node *, Node *);
+};
 
 #endif
