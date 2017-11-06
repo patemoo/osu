@@ -17,7 +17,7 @@ LinkedList::LinkedList()
 }
 
 /**
- * Description: 
+ * Description: Add a Node with a value of "val" at the head of the list.
  * */
 void LinkedList::addNodeAtHead(int val)
 {
@@ -37,7 +37,7 @@ void LinkedList::addNodeAtHead(int val)
 
 
 /**
- * Description: 
+ * Description: Add a Node with a value of "val" at the tail of the list.
  * */
 void LinkedList::addNodeAtTail(int val)
 {
@@ -57,7 +57,7 @@ void LinkedList::addNodeAtTail(int val)
 
 
 /**
- * Description: 
+ * Description: Delete the head node, make the next node the new head.
  * */
 void LinkedList::deleteFirst()
 {
@@ -67,6 +67,7 @@ void LinkedList::deleteFirst()
     this->head = garbage->next;
     this->head->prev = nullptr;
     delete garbage;
+    garbage = nullptr;
   }
   else if (this->head != nullptr)
   {
@@ -81,7 +82,7 @@ void LinkedList::deleteFirst()
 
 
 /**
- * Description: 
+ * Description: Delete the tail node, make the previous node the new tail.
  * */
 void LinkedList::deleteLast()
 {
@@ -91,6 +92,7 @@ void LinkedList::deleteLast()
     this->tail = garbage->prev;
     this->tail->next = nullptr;
     delete garbage;
+    garbage = nullptr;
   }
   else if (this->tail != nullptr)
   {
