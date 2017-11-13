@@ -17,7 +17,22 @@ Queue::Queue()
 
 Queue::~Queue()
 {
-
+  while (!this->isEmpty())
+  {
+    if (this->head == this->head->next)
+    {
+      delete this->head;
+      this->head = nullptr;
+    }
+    else
+    {
+      QueueNode *garbage = this->head;
+      this->head->next->prev = this->head->prev;
+      this->head->prev->next = this->head->next;
+      this->head = this->head->next;
+      delete garbage;
+    }
+  }
 }
 
 bool Queue::isEmpty()
@@ -58,6 +73,9 @@ int Queue::getFront()
 }
 
 
+/**
+ * Description: delete the first node in the list.
+ * */
 void Queue::removeFront()
 {
   if (!this->isEmpty())
