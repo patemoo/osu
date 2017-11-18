@@ -27,7 +27,7 @@ using std::vector;
 
 void readFile(vector<int> &, string);
 void printSearchResult(int);
-void outputResult(vector<int>);
+void outputResult(vector<int> &);
 
 int main()
 {
@@ -123,7 +123,7 @@ void printSearchResult(int result)
 /**
  * Description: outputs a sortered list to a file.
  * */
-void outputResult(vector<int> nums)
+void outputResult(vector<int> &nums)
 {
   string filename;
   cout << "\nPlease select a file name: ";
