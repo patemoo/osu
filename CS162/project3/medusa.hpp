@@ -15,7 +15,7 @@ private:
 public:
   Medusa();
   int attack();
-  void defense(int);
+  bool defense(int);
 };
 
 #endif

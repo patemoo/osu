@@ -16,7 +16,31 @@ int HarryPotter::attack()
   return this->roll(this->getAttackDie());
 }
 
-void HarryPotter::defense(int attackValue)
+bool HarryPotter::defense(int attackValue)
 {
+  bool usedHogwarts = false; 
+  int roll = this->roll(this->getDefenseDie());
+  int armor = this->getArmor();
+  int strength = this->getStrengthPoints();
+  int damage;
   
+  damage = this->calcDamage(attackValue, roll, armor, strength);
+  this->takeDamage(this, damage);
+
+  if (this->getStrengthPoints() <= 0)
+    {
+      if (!usedHogwarts)
+      {
+        cout << "\nHarry dies and comes back stronger!" << endl;
+        this->setStrengthPoints(20);
+        usedHogwarts = true;
+      }
+      else
+      {
+        cout << "\nHarry Potter is dead." << endl;
+        return false;
+      }
+      
+    }
+  return true;
 }

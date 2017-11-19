@@ -31,6 +31,11 @@ DieType Character::getDefenseDie()
   return this->defenseDie;
 }
 
+void Character::setDefenseDie(DieType die)
+{
+  this->defenseDie = die;
+}
+
 int Character::getArmor()
 {
   return this->armor;
@@ -39,6 +44,48 @@ int Character::getArmor()
 int Character::getStrengthPoints()
 {
   return this->strengthPoints;
+}
+
+void Character::setStrengthPoints(int points)
+{
+  this->strengthPoints = points;
+}
+
+void Character::decreaseStrengthPoints(int damage)
+{
+  this->strengthPoints -= damage;
+}
+
+
+int Character::calcDamage(int attack, int defense, int armor, int strength)
+{
+  int damage;
+  if (attack == 60)
+  {
+    cout << "\nMedusa uses glare!" << endl;
+    damage = strength;
+  }
+  else
+  {
+    damage = attack - defense - armor;
+    cout << "Attack roll: " << attack << endl;
+    cout << "Defense roll: " << defense << " + armor: " << armor << endl;
+  }
+
+  return damage;
+}
+
+void Character::takeDamage(Character *self, int damage)
+{
+  if (damage > 0)
+  {
+    cout << "Damage inflicted: " << damage << endl;
+    self->decreaseStrengthPoints(damage);
+  }
+  else
+  {
+    cout << "Damage inflicted: 0" << endl;
+  }
 }
 
 

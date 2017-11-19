@@ -15,7 +15,7 @@ private:
 public:
   HarryPotter();
   int attack();
-  void defense(int);
+  bool defense(int);
 };
 
 #endif

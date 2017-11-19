@@ -19,7 +19,8 @@ using std::endl;
 #include <cstdlib>
 using std::rand;
 
-void printRoundStats(Character *, Character *);
+void printAttackStats(Character *, Character *);
+Character * getCharacter(int);
 
 int main()
 {
@@ -39,110 +40,47 @@ int main()
     // prompt user and create player one's character.
     cout << "\nChoose a character for Player One." << endl;
     int p1Choice = menu(characterOptions);
-    switch (p1Choice)
-    {
-      case CharType::vampire:
-      {
-        Vampire vamp;
-        playerOne = &vamp;
-      }
-      break;
-      case CharType::barbarian:
-      {
-        Barbarian barb;
-        playerOne = &barb;
-      }
-      break;
-      case CharType::bluemen:
-      {
-        BlueMen blue;
-        playerOne = &blue;
-      }
-      break;
-      case CharType::medusa:
-      {
-        Medusa med;
-        playerOne = &med;
-      }
-      break;
-      case CharType::harrypotter:
-      {
-        HarryPotter potter;
-        playerOne = &potter;
-      }
-      break;
-    }
+    playerOne = getCharacter(p1Choice);
     
     // prompt user and create player two's character.
     cout << "\nChoose a character for Player Two." << endl;
     int p2Choice = menu(characterOptions);
-    switch (p2Choice)
-    {
-      case CharType::vampire:
-      {
-        Vampire vamp;
-        playerTwo = &vamp;
-      }
-      break;
-      case CharType::barbarian:
-      {
-        Barbarian barb;
-        playerTwo = &barb;
-      }
-      break;
-      case CharType::bluemen:
-      {
-        BlueMen blue;
-        playerTwo = &blue;
-      }
-      break;
-      case CharType::medusa:
-      {
-        Medusa med;
-        playerTwo = &med;
-      }
-      break;
-      case CharType::harrypotter:
-      {
-        HarryPotter potter;
-        playerTwo = &potter;
-      }
-      break;
-    }
+    playerTwo = getCharacter(p2Choice);
+ 
 
-    // I would have liked to combine the logic from the two above switch statements 
-    // and abstract it out to a helper function but was running into some memory allocation issues.
-    
     bool inCombat = true;
     // Randomize who attacks first.
     srand(time(0));
     int combatToggle = rand() % 2;
     
     // remove this code
-    int count = 0;
+    // int count = 0;
 
     // combat loop
     while (inCombat)
     {
       if (combatToggle)
       {
-        printRoundStats(playerOne, playerTwo);
-        // playerTwo->defense(playerOne->attack());
-        // playerOne->defense(playerTwo->attack());
+        printAttackStats(playerOne, playerTwo);
+        inCombat = playerTwo->defense(playerOne->attack());
+        if (inCombat)
+        {
+          printAttackStats(playerTwo, playerOne);
+          inCombat = playerOne->defense(playerTwo->attack());
+        }
       }
       else
       {
-        printRoundStats(playerTwo, playerOne);
-        // playerOne->defense(playerTwo->attack());
-        // playerTwo->defense(playerOne->attack());
+        printAttackStats(playerTwo, playerOne);
+        inCombat = playerOne->defense(playerTwo->attack());
+        if (inCombat)
+        {
+          printAttackStats(playerOne, playerTwo);
+          inCombat = playerTwo->defense(playerOne->attack());
+        }
       }
-
+      
       combatToggle = !combatToggle;
-      if (count == 1)
-      {
-        inCombat = false;
-      }
-      count += 1;
     }
 
     // prompt user to play again or exit the game.
@@ -163,13 +101,52 @@ int main()
 
 
 /**
- * Description:
+ * Description: return a new character based on the user's choice.
  * */
-void printRoundStats(Character *attacker, Character *defender)
+Character * getCharacter(int choice)
 {
-  cout << "\nAttacker type: " << attacker->getTypeName() << endl;
-  cout << "\nDefender type: " << defender->getTypeName() << endl;
-  cout << "Defender armor: " << defender->getArmor() << endl;
-  cout << "Defender strength: " << defender->getStrengthPoints() << endl;
+  enum CharType{vampire = 1, barbarian, bluemen, medusa, harrypotter};
+  Character *player;
+  switch (choice)
+  {
+    case CharType::vampire:
+    {
+      player = new Vampire;
+    }
+    break;
+    case CharType::barbarian:
+    {
+      player = new Barbarian;
+    }
+    break;
+    case CharType::bluemen:
+    {
+      player = new BlueMen;
+    }
+    break;
+    case CharType::medusa:
+    {
+      player = new Medusa;
+    }
+    break;
+    case CharType::harrypotter:
+    {
+      player = new HarryPotter;
+    }
+    break;
+  }
+  return player;
+}
+
+
+/**
+ * Description: Print stats.
+ * */
+void printAttackStats(Character *attacker, Character *defender)
+{
+  cout << "\nAttacker: " << attacker->getTypeName();
+  cout << "\nDefender: " << defender->getTypeName() << " ";
+  cout << "armor: " << defender->getArmor() << " ";
+  cout << "strength: " << defender->getStrengthPoints() << endl;
   cout << endl;
 }

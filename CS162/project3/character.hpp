@@ -30,12 +30,17 @@ private:
 public:
   Character(string, DieType, DieType, int, int);
   virtual int attack() = 0;
-  virtual void defense(int) = 0;
+  virtual bool defense(int) = 0;
   string getTypeName();
   DieType getAttackDie();
   DieType getDefenseDie();
+  void setDefenseDie(DieType);
   int getArmor();
   int getStrengthPoints();
+  void setStrengthPoints(int);
+  void decreaseStrengthPoints(int);
+  int calcDamage(int, int, int, int);
+  void takeDamage(Character *, int);
   int roll(DieType);
 };
 

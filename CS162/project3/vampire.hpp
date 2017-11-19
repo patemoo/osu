@@ -15,7 +15,7 @@ private:
 public:
   Vampire();
   int attack();
-  void defense(int);
+  bool defense(int);
 };
 
 #endif
