@@ -12,10 +12,11 @@
 class SwingState : public State
 {
 private:
-  
+  int p1ActionCount = 0;
+  int aiActionCount = 0;
 public:
   SwingState(string);
-  void moveOn(Player *);
+  int calcVotes(Player &, Action, int &);
 };
 
 #endif

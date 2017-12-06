@@ -15,7 +15,7 @@ private:
   
 public:
   RedState(string);
-  void moveOn(Player *);
+  int calcVotes(Player &, Action, int &);
 };
 
 #endif

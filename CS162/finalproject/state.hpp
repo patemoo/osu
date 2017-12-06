@@ -12,6 +12,8 @@
 #include <string>
 using std::string;
 
+enum Action{speech = 1, doors, baby};
+
 class State
 {
 private:
@@ -20,17 +22,13 @@ private:
   State *right = nullptr;
   State *bottom = nullptr;
   string name;
-  int visitVotes = 0;
-
 public:
   State(string);
   void setSides(State *, State *, State *, State *);
-  virtual void moveOn(Player *) = 0;
+  void moveOn(Player &);
+  virtual int calcVotes(Player &, Action, int &) = 0;
   string getName();
-  int getVisitVotes();
-  void addVisitVotes(int);
-  void removeVisitVotes(int);
-  State * moveMenu();
+  State * moveMenu(Player &);
 };
 
 #endif

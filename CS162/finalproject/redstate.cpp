@@ -15,12 +15,36 @@ RedState::RedState(string name) : State(name)
 
 }
 
-/**
- * 
- * */
-void RedState::moveOn(Player *player)
+int RedState::calcVotes(Player &player, Action action, int &count)
 {
-  cout << "\nWhere would you like to campaign next?\n" << endl;
+  int votes = rand() % 9;
+  switch (action)
+  {
+    case Action::speech:
+      votes += 16;
+      if (count > 0)
+      {
+        votes /= count;
+      }
+      count += 1;
+      break;
+    case Action::doors:
+      votes += 8;
+      break;
+    case Action::baby:
+      votes += 2;
+      break;
+  }
+  
+  // Campaigning in red states benefits republicans over democrats
+  if (player.getParty() == "Republican")
+  {
+    votes *= 1.5;
+  }
+  else
+  {
+    votes *= .75;
+  }
 
-  player->setLocation(State::moveMenu());
+  return votes;
 }

@@ -15,7 +15,7 @@ private:
   
 public:
   BlueState(string);
-  void moveOn(Player *);
+  int calcVotes(Player &, Action, int &);
 };
 
 #endif

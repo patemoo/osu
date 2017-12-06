@@ -8,21 +8,26 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include <string>
+using std::string;
+
 class State; // forward decloration.
 
-enum Party{Dem = 1, Rep, Ind};
+enum Party{Dem = 1, Rep};
 
 class Player
 {
 private:
+  string name;
   Party party;
   State *currentLocation;
   int votes;
 public:
-  Player(Party);
-  Party getParty();
+  Player(Party, string);
+  string getParty();
+  string getName();
   int getVotes();
-  void addVotes(int);
+  bool addVotes(int);
   void removeVotes(int);
   void setLocation(State *);
   State* getLocation();
