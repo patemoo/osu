@@ -21,7 +21,7 @@ private:
   string name;
   Party party;
   State *currentLocation;
-  int votes;
+  int votes = 0;
 public:
   Player(Party, string);
   string getParty();
