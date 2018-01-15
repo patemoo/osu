@@ -16,6 +16,7 @@ int main()
 {
 
   printf("%f", getArea(6,5,10));
+  printf("\n");
 
   return 0;
 }
