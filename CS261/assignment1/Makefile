@@ -19,3 +19,5 @@ all:
 	gcc -Wall -std=c99 -o Q4 Q4.c
 	gcc -Wall -std=c99 -o Q5 Q5.c
 
+clean:
+	rm Q0 Q1 Q2 Q3 Q4 Q5
