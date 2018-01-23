@@ -1,6 +1,6 @@
 /* CS261- Assignment 1 - Q. 0*/
 /* Name: Patrick Moore
- * Date: January 16, 2018
+ * Date: Jan 16, 2018
  * Solution description:
  */
  
@@ -15,7 +15,7 @@ void fooA(int* iptr){
      printf("Address pointed to by iptr: %p \n", iptr);
      
      /*Print the address of iptr itself*/
-     printf("Address of iptr itself: %p \n", iptr);
+     printf("Address of iptr itself: %p \n", &iptr);
 }
 
 int main(){
