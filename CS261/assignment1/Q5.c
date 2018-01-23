@@ -47,7 +47,7 @@ int main(){
     /*Read word from the keyboard using scanf*/
     char *word = malloc(20 * sizeof(char));
 
-    scanf("%s\n", word);
+    scanf("%s", word);
     
     /*Call sticky*/
     sticky(word);
