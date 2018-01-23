@@ -26,10 +26,8 @@ void sticky(char* word){
             return;
         }
         
-        // printf("%d", word[i] < 95);
         if (i % 2 == 0)
         {
-
             if (word[i] > 93)
             {
                 word[i] = toUpperCase(word[i]);
@@ -49,13 +47,13 @@ int main(){
     /*Read word from the keyboard using scanf*/
     char *word = malloc(20 * sizeof(char));
 
-    scanf("%s", word);
+    scanf("%s\n", word);
     
     /*Call sticky*/
     sticky(word);
     
     /*Print the new word*/
-    printf("%s", word);
+    printf("%s\n", word);
     
     return 0;
 }
