@@ -47,7 +47,14 @@ int isBalanced(char* s)
 
 		if (next == ')' || next == '}' || next == ']')
 		{
-			popDynArr(charArray);
+			if (!isEmptyDynArr(charArray))
+			{
+				popDynArr(charArray);
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		
 		end = next;
