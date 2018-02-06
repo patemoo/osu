@@ -26,6 +26,17 @@ struct LinkedList
  */
 static void init(struct LinkedList* list) {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	list->frontSentinel = (struct Link *) malloc(sizeof(struct Link));
+	list->backSentinel = (struct Link *) malloc(sizeof(struct Link));
+
+	list->frontSentinel->prev = 0;
+	list->frontSentinel->next = list->backSentinel;
+	list->backSentinel->prev = list->frontSentinel;
+	list->backSentinel->next = 0;
+
+	list->size = 0;
 }
 
 /**
@@ -35,6 +46,17 @@ static void init(struct LinkedList* list) {
 static void addLinkBefore(struct LinkedList* list, struct Link* link, TYPE value)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	assert(link != 0);
+
+	struct Link *newLink = (struct Link *) malloc(sizeof(struct Link));
+	newLink->value = value;
+	newLink->next = link;
+	newLink->prev = link->prev;
+	newLink->prev->next = newLink;
+	link->prev = newLink;
+	
+	list->size++;
 }
 
 /**
@@ -44,6 +66,16 @@ static void addLinkBefore(struct LinkedList* list, struct Link* link, TYPE value
 static void removeLink(struct LinkedList* list, struct Link* link)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	assert(link != 0);
+
+	link->prev->next = link->next;
+	link->next->prev = link->prev;
+
+	free(link);
+	link = 0;
+
+	list->size--;
 }
 
 /**
@@ -77,6 +109,9 @@ void linkedListDestroy(struct LinkedList* list)
 void linkedListAddFront(struct LinkedList* list, TYPE value)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	addLinkBefore(list, list->frontSentinel->next, value);
 }
 
 /**
@@ -85,6 +120,9 @@ void linkedListAddFront(struct LinkedList* list, TYPE value)
 void linkedListAddBack(struct LinkedList* list, TYPE value)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	
+	addLinkBefore(list, list->backSentinel, value);
 }
 
 /**
@@ -93,6 +131,10 @@ void linkedListAddBack(struct LinkedList* list, TYPE value)
 TYPE linkedListFront(struct LinkedList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	assert(list->frontSentinel->next != list->backSentinel);
+		
+	return list->frontSentinel->next->value;
 }
 
 /**
@@ -101,6 +143,10 @@ TYPE linkedListFront(struct LinkedList* list)
 TYPE linkedListBack(struct LinkedList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	assert(list->backSentinel->prev != list->frontSentinel);
+		
+	return list->backSentinel->prev->value;
 }
 
 /**
@@ -109,6 +155,9 @@ TYPE linkedListBack(struct LinkedList* list)
 void linkedListRemoveFront(struct LinkedList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	removeLink(list, list->frontSentinel->next);
 }
 
 /**
@@ -117,6 +166,9 @@ void linkedListRemoveFront(struct LinkedList* list)
 void linkedListRemoveBack(struct LinkedList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	removeLink(list, list->backSentinel->prev);
 }
 
 /**
@@ -125,6 +177,11 @@ void linkedListRemoveBack(struct LinkedList* list)
 int linkedListIsEmpty(struct LinkedList* list)
 {
 	// FIXME: you must write this
+	if (list->frontSentinel->next == list->backSentinel)
+	{
+		return 1;
+	}
+	return 0;
 }
 
 /**
@@ -133,6 +190,16 @@ int linkedListIsEmpty(struct LinkedList* list)
 void linkedListPrint(struct LinkedList* list)
 {
 	// FIXME: you must write this
+	if (!linkedListIsEmpty(list))
+	{
+		struct Link * print = list->frontSentinel;
+
+		for (int i = 0; i < list->size; i++)
+		{
+			printf("%d", print->next->value);
+			print = print->next;
+		}
+	}
 }
 
 /**
@@ -141,6 +208,7 @@ void linkedListPrint(struct LinkedList* list)
 void linkedListAdd(struct LinkedList* list, TYPE value)
 {
 	// FIXME: you must write this
+	addLinkBefore(list, list->frontSentinel->next, value);
 }
 
 /**
@@ -149,6 +217,21 @@ void linkedListAdd(struct LinkedList* list, TYPE value)
 int linkedListContains(struct LinkedList* list, TYPE value)
 {
 	// FIXME: you must write this
+	if (!linkedListIsEmpty(list))
+	{
+		struct Link * match = list->frontSentinel;
+
+		for (int i = 0; i < list->size; i++)
+		{
+			if (match->next->value == value)
+			{
+				return 1;
+			}
+			match = match->next;
+		}
+		
+	}
+	return 0;
 }
 
 /**
@@ -157,4 +240,18 @@ int linkedListContains(struct LinkedList* list, TYPE value)
 void linkedListRemove(struct LinkedList* list, TYPE value)
 {
 	// FIXME: you must write this
+	if (!linkedListIsEmpty(list))
+	{
+		struct Link * match = list->frontSentinel;
+
+		for (int i = 0; i < list->size; i++)
+		{
+			if (match->next->value == value)
+			{
+				removeLink(list, match->next);
+				return;
+			}
+			match = match->next;
+		}
+	}
 }

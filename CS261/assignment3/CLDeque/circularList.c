@@ -24,6 +24,12 @@ struct CircularList
 static void init(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	list->sentinel = (struct Link *) malloc(sizeof(struct Link));
+	list->sentinel->next = list->sentinel;
+	list->sentinel->prev = list->sentinel;
+	list->size = 0;
 }
 
 /**
@@ -32,7 +38,12 @@ static void init(struct CircularList* list)
 static struct Link* createLink(TYPE value)
 {
 	// FIXME: you must write this
-	return NULL;
+	struct Link * lnk = (struct Link *) malloc(sizeof(struct Link));
+	lnk->next = 0;
+	lnk->prev = 0;
+	lnk->value = value;
+
+	return lnk;
 }
 
 /**
@@ -42,6 +53,16 @@ static struct Link* createLink(TYPE value)
 static void addLinkAfter(struct CircularList* list, struct Link* link, TYPE value)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	assert(link != 0);
+
+	struct Link *newLink = createLink(value);
+	link->next->prev = newLink;
+	newLink->next = link->next;
+	newLink->prev = link;
+	link->next = newLink;
+
+	list->size++;
 }
 
 /**
@@ -51,6 +72,16 @@ static void addLinkAfter(struct CircularList* list, struct Link* link, TYPE valu
 static void removeLink(struct CircularList* list, struct Link* link)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	assert(link != 0);
+
+	link->next->prev = link->prev;
+	link->prev->next = link->next;
+
+	free(link);
+	link = 0;
+
+	list->size--;
 }
 
 /**
@@ -69,6 +100,14 @@ struct CircularList* circularListCreate()
 void circularListDestroy(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	for (int i = 0; i < list->size; i++)
+	{
+		removeLink(list, list->sentinel->next);
+	}
+	free(list->sentinel);
+	free(list);
+	list = 0;
 }
 
 /**
@@ -77,6 +116,9 @@ void circularListDestroy(struct CircularList* list)
 void circularListAddFront(struct CircularList* list, TYPE value)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	addLinkAfter(list, list->sentinel, value);
 }
 
 /**
@@ -85,6 +127,9 @@ void circularListAddFront(struct CircularList* list, TYPE value)
 void circularListAddBack(struct CircularList* list, TYPE value)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	addLinkAfter(list, list->sentinel->prev, value);
 }
 
 /**
@@ -93,7 +138,8 @@ void circularListAddBack(struct CircularList* list, TYPE value)
 TYPE circularListFront(struct CircularList* list)
 {
 	// FIXME: you must write this
-	return 0;
+	assert(list != 0);
+	return list->sentinel->next->value;
 }
 
 /**
@@ -102,7 +148,8 @@ TYPE circularListFront(struct CircularList* list)
 TYPE circularListBack(struct CircularList* list)
 {
 	// FIXME: you must write this
-	return 0;
+	assert(list != 0);
+	return list->sentinel->prev->value;
 }
 
 /**
@@ -111,6 +158,9 @@ TYPE circularListBack(struct CircularList* list)
 void circularListRemoveFront(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	removeLink(list, list->sentinel->next);
 }
 
 /**
@@ -119,6 +169,9 @@ void circularListRemoveFront(struct CircularList* list)
 void circularListRemoveBack(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+
+	removeLink(list, list->sentinel->prev);
 }
 
 /**
@@ -127,6 +180,11 @@ void circularListRemoveBack(struct CircularList* list)
 int circularListIsEmpty(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	if (list->sentinel->next == list->sentinel)
+	{
+		return 1;
+	}
 	return 0;
 }
 
@@ -136,6 +194,15 @@ int circularListIsEmpty(struct CircularList* list)
 void circularListPrint(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	printf("\n");
+	struct Link * print = list->sentinel;
+	for (int i = 0; i < list->size; i++)
+	{
+		print = print->next;
+		printf(" %g \n", print->value);
+	}
+	printf("\n");
 }
 
 /**
@@ -144,4 +211,14 @@ void circularListPrint(struct CircularList* list)
 void circularListReverse(struct CircularList* list)
 {
 	// FIXME: you must write this
+	assert(list != 0);
+	struct Link * currentLink = list->sentinel;
+	for (int i = 0; i <= list->size; i++)
+	{
+		struct Link * tempLink = currentLink->next;
+		currentLink->next = currentLink->prev;
+		currentLink->prev = tempLink;
+
+		currentLink = tempLink;
+	}
 }
