@@ -264,7 +264,12 @@ int _smallerIndexHeap(DynArr *heap, int i, int j)
 TYPE getMinHeap(DynArr *heap)
 {
   	/* FIXME */
+	assert(heap != 0);
+	assert(heap->size > 0);
   	TYPE temp;
+	
+	temp = getDynArr(heap, 0);
+
   	return temp;
 }
 
@@ -278,6 +283,10 @@ TYPE getMinHeap(DynArr *heap)
 void addHeap(DynArr *heap, TYPE node)
 {
   	/* FIXME */
+	assert(heap != 0);
+
+	addDynArr(heap, node);
+	_adjustHeap(heap, sizeDynArr(heap) - 1, 0);
 }
 
 /*	Adjust heap to maintain heap property
@@ -291,6 +300,30 @@ void addHeap(DynArr *heap, TYPE node)
 void _adjustHeap(DynArr *heap, int max, int pos)
 {
   	/* FIXME */
+	assert(heap != 0);
+
+	int leftChild = 2 * pos + 1;
+	int rightChild = 2 * pos + 2;
+
+	int smallestChild = 0;
+	if (rightChild < max)
+	{
+		smallestChild = _smallerIndexHeap(heap, leftChild, rightChild);
+		if ( getDynArr(heap, smallestChild).priority < getDynArr(heap, pos).priority )
+		{
+			swapDynArr(heap, pos, smallestChild);
+			_adjustHeap(heap, max, smallestChild);
+		}
+	}
+	else if (leftChild <= max)
+	{
+		smallestChild = leftChild;
+		if ( getDynArr(heap, smallestChild).priority < getDynArr(heap, pos).priority )
+		{
+			swapDynArr(heap, pos, smallestChild);
+			_adjustHeap(heap, max, smallestChild);
+		}
+	}
 }
 
 /*	Remove the first node, which has the min priority, from the heap
@@ -302,6 +335,12 @@ void _adjustHeap(DynArr *heap, int max, int pos)
 void removeMinHeap(DynArr *heap)
 {
   	/* FIXME */
+	assert(sizeDynArr(heap) > 0);
+	int last = sizeDynArr(heap) - 1;
+
+	putDynArr(heap, 0, getDynArr(heap, last));
+	removeAtDynArr(heap, last);
+	_adjustHeap(heap, last, 0);
 }
 
 
@@ -315,7 +354,15 @@ void removeMinHeap(DynArr *heap)
 void _buildHeap(DynArr *heap)
 {
 	/* FIXME */
-	
+	assert(heap != 0);
+
+	int max = sizeDynArr(heap) - 1;
+	int start = max / 2;
+
+	for (int i = start; i >= 0; i--)
+	{
+		_adjustHeap(heap, max, i);
+	}
 }
 /* 
 	In-place sort of the heap 
@@ -328,4 +375,16 @@ void _buildHeap(DynArr *heap)
 void sortHeap(DynArr *heap)
 {
 	/*FIXME*/
+	assert(heap != 0);
+
+	_buildHeap(heap);
+
+	int last = sizeDynArr(heap) - 1;
+
+	for (int i = last; i >= 0; i--)
+	{
+		swapDynArr(heap, 0, last);
+		last--;
+		_adjustHeap(heap, last, 0);
+	}
 }

@@ -38,6 +38,15 @@ TYPE createTask (int priority, char *desc)
 void saveList(DynArr *heap, FILE *filePtr)
 {
   	/* FIX ME */
+	assert(heap != 0);
+
+	for (int i=0; i<sizeDynArr(heap); i++)
+	{
+		fputs((const char *)&heap->data[i].priority, filePtr);
+		fputs("\t", filePtr);
+		fputs(heap->data[i].description , filePtr);
+		fputs("\n", filePtr);
+	}
 }
 
 /*  Load the list from a file
@@ -51,6 +60,30 @@ void saveList(DynArr *heap, FILE *filePtr)
 void loadList(DynArr *heap, FILE *filePtr)
 {
   	/* FIX ME */
+
+	char buff[255];
+
+	while (fgets(buff, 225, filePtr))
+	{
+		int pri = atoi (&buff[0]);
+		char * desc;
+		if (pri > 9)
+		{
+			desc = buff + 3;
+		}
+		else if (pri > 99)
+		{
+			desc = buff + 4;
+		}
+		else 
+		{
+			desc = buff + 2;
+		}
+
+		TYPE task = createTask(pri, desc);
+		addHeap(heap, task);
+	}
+	
 }
 
 /*  Print the list
@@ -63,6 +96,23 @@ void loadList(DynArr *heap, FILE *filePtr)
 void printList(DynArr *heap)
 {
   	/* FIX ME  */
+	assert(heap != 0);
+
+	int size = sizeDynArr(heap);
+
+	DynArr *forPrint = newDynArr(size);
+
+	copyDynArr(heap, forPrint);
+	sortHeap(forPrint);
+	for (int i = size - 1; i >= 0; i--)
+	{
+		int pri = forPrint->data[i].priority;
+		char * desc = forPrint->data[i].description;
+
+		printf("%d\t%s\n", pri, desc);
+	}
+
+	freeDynArr(forPrint);
 }
 
 /*  Compare two tasks by priority
