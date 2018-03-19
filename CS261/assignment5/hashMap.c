@@ -90,7 +90,7 @@ void hashMapCleanUp(HashMap* map)
         while (link != NULL)
         {
             HashLink* temp = link;
-            free(link);
+            hashLinkDelete(link);
             link = temp->next;
         }
     }
@@ -182,7 +182,6 @@ void resizeTable(HashMap* map, int capacity)
         while (link != NULL)
         {
             hashMapPut(map, link->key, link->value);
-            hashLinkDelete(link);
             link = link->next;
         }
     }

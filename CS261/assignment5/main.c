@@ -72,7 +72,42 @@ int main(int argc, const char** argv)
     HashMap* map = hashMapNew(10);
     
     // --- Concordance code begins here ---
+    FILE* textFile = fopen(fileName, "r");
+
+    char* word = nextWord(textFile);
+
+    while (word != 0)
+    {
+        int* count = hashMapGet(map, word);
+
+        if (count)
+        {
+            hashMapPut(map, word, *count + 1);
+        }
+        else 
+        {
+            hashMapPut(map, word, 1);
+        }
+
+        word = nextWord(textFile);
+    }
+
     // Be sure to free the word after you are done with it here.
+    free(word);
+
+    printf("\n");
+    for (int i = 0; i < map->capacity; i++)
+    {
+        HashLink* link = map->table[i];
+        while (link != NULL)
+        {
+            printf("%s: %d \n", link->key, link->value);
+            link = link->next;
+        }
+    }
+    printf("\n");
+
+    fclose(textFile);
     // --- Concordance code ends here ---
     
     hashMapPrint(map);
