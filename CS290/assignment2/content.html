@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>W1</th>
+                    <td>Oct 1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <th>W2</th>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <th>W3</th>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                </tr>
+                <tr>
+                    <th>W4</th>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                </tr>
+                <tr>
+                    <th>W5</th>
+                    <td>29</td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td>Nov 1</td>
+                    <td>2</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        Month: 
+                    </td>
+                    <td colspan="4">
+                        <cite> <!-- I consider this the table caption. -->
+                            October
+                        </cite>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <ul>
+            <li>Task one:</li>
+            <li>Task two:</li>
+            <li>Task three:</li>
+        </ul>
+        
+        <div class="outer-content">
+            <div class="inner-content"></div>
+        </div>
+
+        <form action="http://classes.engr.oregonstate.edu/eecs/winter2015/cs290-400/tools/class-content/form_tests/check_request.php" method="get">
+            <fieldset>
+                <legend>GET Form</legend>
+
+                <section>
+                    <div class="fields">
+                        <input type="text" name="text_input" placeholder="Add event title"/>
+                        <input type="number" name="numerical_input" placeholder="Add event date"/>
+                        <input type="password" name="password_input" placeholder="Enter password"/>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="candy" value="Snickers"></input> Snickers
+                        </label>
+                        <label>
+                            <input type="radio" name="candy" value="Skittles"></input> Skittles
+                        </label>
+                        <label>
+                            <input type="radio" name="candy" value="Mentos"></input> Mentos
+                        </label>
+                    </div>
+
+                    <div class="submit">
+                        <button type="submit">Send GET</button>
+                    </div>
+                </section>
+            </fieldset>
+        </form>
+
+        <form action="http://classes.engr.oregonstate.edu/eecs/winter2015/cs290-400/tools/class-content/form_tests/check_request.php" method="post">
+                <fieldset>
+                        <legend>POST Form</legend>
+        
+                        <section>
+                            <div class="fields">
+                                <input type="text" name="text_input" placeholder="Add event title"/>
+                                <input type="number" name="numerical_input" placeholder="Add event date"/>
+                                <input type="password" name="password_input" placeholder="Enter password"/>
+                            </div>
+        
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="candy" value="Snickers"></input> Snickers
+                                </label>
+                                <label>
+                                    <input type="radio" name="candy" value="Skittles"></input> Skittles
+                                </label>
+                                <label>
+                                    <input type="radio" name="candy" value="Mentos"></input> Mentos
+                                </label>
+                            </div>
+        
+                            <div class="submit">
+                                <button type="submit">Send POST</button>
+                            </div>
+                        </section>
+                    </fieldset>
+        </form>
+    </body>
+</html>
