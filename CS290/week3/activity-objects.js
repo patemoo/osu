@@ -1,4 +1,3 @@
-
 function deepEqual(itemOne, itemTwo) {
     let isEqual = true;
     if ((itemOne && (typeof itemOne === 'object')) && (itemTwo && (typeof itemTwo === 'object'))) {
