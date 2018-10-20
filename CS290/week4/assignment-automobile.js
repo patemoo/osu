@@ -1,9 +1,11 @@
-function Automobile( year, make, model, type ){
-    this.year = year; //integer (ex. 2001, 1995)
-    this.make = make; //string (ex. Honda, Ford)
-    this.model = model; //string (ex. Accord, Focus)
-    this.type = type; //string (ex. Pickup, SUV)
-    this.logMe = (logType) => {
+class Automobile {
+    constructor(year, make, model, type) {
+        this.year = year; //integer (ex. 2001, 1995)
+        this.make = make; //string (ex. Honda, Ford)
+        this.model = model; //string (ex. Accord, Focus)
+        this.type = type; //string (ex. Pickup, SUV)
+    }
+    logMe(logType) {
         let info = ''
         info += this.year + '\t';
         info += this.make + '\t';
