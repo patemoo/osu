@@ -5,14 +5,17 @@ class Automobile {
         this.model = model; //string (ex. Accord, Focus)
         this.type = type; //string (ex. Pickup, SUV)
     }
+
     logMe(logType) {
         let info = ''
         info += this.year + '\t';
         info += this.make + '\t';
         info += this.model;
+
         if (logType) {
             info += '\t' + this.type;
         }
+
         console.log(info);
     }
 }
@@ -29,7 +32,23 @@ var automobiles = [
 /*This function sorts arrays using an arbitrary comparator. You pass it a comparator and an array of objects appropriate for that comparator and it will return a new array which is sorted with the largest object in index 0 and the smallest in the last index*/
 function sortArr( comparator, array ){
     /*your code here*/
-    return array;
+    let result = [];
+    let arrayCopy = array.slice(0);
+
+    while (arrayCopy.length) {
+        let greatest = 0;
+
+        for (let i=0,length=arrayCopy.length; i<length; i++) {
+            if (comparator(arrayCopy[i], arrayCopy[greatest])) {
+                greatest = i;
+            }
+        }
+
+        result.push(arrayCopy[greatest]);
+        arrayCopy.splice(greatest, 1);
+    }
+      
+    return result;
 }
 
 /*A comparator takes two arguments and uses some algorithm to compare them. If the first argument is larger or greater than the 2nd it returns true, otherwise it returns false. Here is an example that works on integers*/
@@ -46,16 +65,75 @@ function exComparator( int1, int2){
 /*This compares two automobiles based on their year. Newer cars are "greater" than older cars.*/
 function yearComparator( auto1, auto2){
     /* your code here*/
+    let isGreater = false;
+
+    if (auto1.year > auto2.year) {
+        isGreater = true;
+    }
+
+    return isGreater;
 }
 
 /*This compares two automobiles based on their make. It should be case insensitive and makes which are alphabetically earlier in the alphabet are "greater" than ones that come later.*/
 function makeComparator( auto1, auto2){
     /* your code here*/
+    let isGreater = false;
+    let stringIndex = 0;
+    let make1 = auto1.make.toLowerCase();
+    let make2 = auto2.make.toLowerCase();
+    let letter1, letter2;
+
+    do {
+        letter1 = make1.charAt(stringIndex);
+        letter2 = make2.charAt(stringIndex);
+        stringIndex++;
+
+    } while (letter1 && letter2 && letter1 === letter2);
+
+    if (letter1 < letter2) {
+        isGreater = true;
+    }
+
+    return isGreater;
 }
 
 /*This compares two automobiles based on their type. The ordering from "greatest" to "least" is as follows: roadster, pickup, suv, wagon, (types not otherwise listed). It should be case insensitive. If two cars are of equal type then the newest one by model year should be considered "greater".*/
 function typeComparator( auto1, auto2){
     /* your code here*/
+    let isGreater = false;
+    let rank1 = typeRank(auto1.type);
+    let rank2 = typeRank(auto2.type);
+
+    if (rank1 > rank2) {
+        isGreater = true;
+    } else if (rank1 === rank2) {
+        isGreater = yearComparator(auto1, auto2);
+    }
+    
+    return isGreater;
+}
+
+function typeRank(type) {
+    let rank;
+    type = type.toLowerCase();
+    switch(type) {
+        case 'roadster':
+            rank = 4;
+            break;
+        case 'pickup': 
+            rank = 3;
+            break;
+        case 'suv':
+            rank = 2;
+            break;
+        case 'wagon': 
+            rank = 1;
+            break;
+        default: 
+            rank = 0;
+            break;
+    }
+    return rank;
 }
 
 /*Your program should output the following to the console.log, including the opening and closing 5 stars. All values in parenthesis should be replaced with appropriate values. Each line is a seperate call to console.log.
