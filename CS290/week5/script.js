@@ -54,8 +54,8 @@ window.onload = () => {
 
         for (let i=0; i < 4; i++) {
             let td = document.createElement('td');
-            td.id = `cell-${j+1}-${i+1}`;
-            td.innerHTML = `${j+1}, ${i+1}`;
+            td.id = `cell-${i+1}-${j+1}`;
+            td.innerHTML = `${i+1}, ${j+1}`;
             tr.appendChild(td);
         }
 
@@ -67,12 +67,12 @@ window.onload = () => {
     // this class manages which cell is slected as well as marking of cells.
     class SelectedCell {
         constructor () {
-            this.row = 1;
             this.column = 1;
+            this.row = 1;
             this.currentCell;
         }
         update() {
-            let id = 'cell-' + this.row + '-' + this.column;
+            let id = 'cell-' + this.column + '-' + this.row;
             let newCell = document.getElementById(id);
             newCell.classList.add('selected');
             if (this.currentCell) {
