@@ -1,16 +1,31 @@
 window.onload = () => {
-    let form = document.querySelector('form');
-    let submitButton = document.querySelector('button#submit');
+    let weatherform = document.querySelector('form#weather-form');
+    let weatherSubmitButton = document.querySelector('button#submit-weather');
 
-    submitButton.onclick = (event) => {
+    let textForm = document.querySelector('form#text-form');
+    let textSubmitButton = document.querySelector('button#submit-text');
+
+    weatherSubmitButton.onclick = (event) => {
         event.preventDefault();
         
-        let value = form.search.value;
+        let value = weatherform.search.value;
 
         if (value) {
             getWeather(value);
         } else {
             alert ('Please enter a city or zipcode!');
+        }
+    }
+
+    textSubmitButton.onclick = (event) => {
+        event.preventDefault();
+
+        let value = textForm.sendText.value;
+
+        if (value) {
+            sendText(value);
+        } else {
+            alert ('Please enter a text string');
         }
     }
 }
@@ -51,6 +66,7 @@ let getWeather = (value) => {
 }
 
 let displayWeather = (weatherObject) => {
+    clear();
     let city = document.getElementById('city');
     let temp = document.getElementById('temp');
     let icon = document.getElementById('icon');
@@ -69,5 +85,40 @@ let displayWeather = (weatherObject) => {
     temp.innerText = Math.floor(display.temp);
     temp.hidden = false;
     description.innerText = display.description;
+}
 
+let sendText = (value) => {
+    let payload = value;
+    let result = document.getElementById('text-result');
+
+    let request = new XMLHttpRequest();
+    request.open('POST', 'http://httpbin.org/post', true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.addEventListener('load', () => {
+        if(request.status >= 200 && request.status < 400){
+            let response = JSON.parse(request.responseText);
+            clear();
+            result.innerText = response.data;
+        } else {
+            console.log("Error in network request: " + request.statusText);
+        }
+    });
+    request.send(JSON.stringify(payload));
+}
+
+let clear = () => {
+    let city = document.getElementById('city');
+    let temp = document.getElementById('temp');
+    let icon = document.getElementById('icon');
+    let description = document.getElementById('description');
+
+    let result = document.getElementById('text-result');
+
+    city.innerText = '';
+    icon.setAttribute('src', '#')
+    temp.innerText = '';
+    temp.hidden = true;
+    description.innerText = '';
+
+    result.innerText = '';
 }
