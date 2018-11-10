@@ -13,3 +13,5 @@ MTH111
 **/*.pages
 **/*.docx
 **/*.zip
+
+node_modules
