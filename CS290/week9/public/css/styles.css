@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+main {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    text-align: left;
+}
+
+th, td {
+    width: 16%;
+    height: 40px;
+}
+
+th:last-child {
+    width: 10%;
+}
+td:last-child {
+    width: 10%;
+}
+
+form {
+    display: inline-block;
+    width: 100%;
+    font-size: 0;
+}
+
+input {
+    display: inline-block;
+    width: 90%;
+    height: 32px;
+}
+
+button {
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #eaeaea;
+}
+

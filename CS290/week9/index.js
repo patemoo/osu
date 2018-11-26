@@ -27,33 +27,34 @@ app.get('/', (req,res,next) => {
             next(err);
             return;
         }
-        context.results = JSON.stringify(rows);
+        context.results = rows;
         res.render('home', context);
     });
 });
 
 app.get('/insert', (req,res,next) => {
-    let context = {};
-    mysql.pool.query("INSERT INTO tracker (`name`) VALUES (?)", [req.query.c], (err, result) => {
+    // let context = {};
+    pool.query("INSERT INTO tracker (`name`,`reps`,`weight`,`date`,`unit`) VALUES (?, ? , ? , ?, ?)", 
+    [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.unit], (err, result) => {
         if(err){
             next(err);
             return;
         }
-        context.results = "Inserted id " + result.insertId;
-        res.render('home',context);
+        // context.insertResult = JSON.stringify(result);
+        res.redirect('..');
     });
 });
 
 app.get('/safe-update', (req,res,next) => {
     let context = {};
-    mysql.pool.query("SELECT * FROM todo WHERE id=?", [req.query.id], (err, result) => {
+    pool.query("SELECT * FROM tracker WHERE id=?", [req.query.id], (err, result) => {
         if(err){
             next(err);
             return;
         }
         if(result.length == 1){
             var curVals = result[0];
-            mysql.pool.query("UPDATE todo SET name=?, done=?, due=? WHERE id=? ",
+            pool.query("UPDATE tracker SET name=?, done=?, due=? WHERE id=? ",
             [req.query.name || curVals.name, req.query.done || curVals.done, req.query.due || curVals.due, req.query.id],
             (err, result) => {
                 if(err){
@@ -67,17 +68,20 @@ app.get('/safe-update', (req,res,next) => {
     });
 });
 
-app.get('/reset-table',function(req,res,next){
+app.get('/reset-table', (req,res,next) => {
     let context = {};
-    pool.query("DROP TABLE IF EXISTS tracker", function(err){
+    pool.query("DROP TABLE IF EXISTS tracker", (err) => {
         var createString = "CREATE TABLE tracker(" +
         "id INT PRIMARY KEY AUTO_INCREMENT," +
         "name VARCHAR(255) NOT NULL," +
         "reps INT," +
         "weight INT," +
-        "date DATE)" +
-        "unit VARCHAR(255)";
-        mysql.pool.query(createString, function(err){
+        "date DATE," +
+        "unit VARCHAR(255))";
+        pool.query(createString, function(err){
+            if (err) {
+                console.log(err);
+            }
             context.results = "Table reset";
             res.render('home',context);
         })

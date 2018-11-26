@@ -1,0 +1,44 @@
+
+
+
+
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Reps</th>
+                <th>Weight</th>
+                <th>Date</th>
+                <th>Unit</th>
+                <th><button onclick="window.tracker.clear()"><i class="fas fa-trash-alt" title="Clear"></i></button></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each results}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.reps}}</td>
+                <td>{{this.weight}}</td>
+                <td>{{this.date}}</td>
+                <td>{{this.unit}}</td>
+                <td>
+                    <button class="remove" title="Remove"><i class="fas fa-minus"></i></button>
+                    <button class="edit" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                </td>
+            </tr>
+            {{/each}}   
+            <form action="/insert" method="GET" class="add-form">
+                <td><input type="text" name="name"></td>
+                <td><input type="number" name="reps"></td>
+                <td><input type="nuber" name="weight"></td>
+                <td><input type="text" name="date"></td>
+                <td><input type="text" name="units"></td>
+                <td><button id="submit" title="Add"><i class="fas fa-plus"></i></button></td>
+            </form>
+        </tbody>
+    </table>
+</main>
+
+
+
