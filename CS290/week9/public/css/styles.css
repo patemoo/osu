@@ -30,6 +30,29 @@ td:last-child {
     width: 10%;
 }
 
+.edit-cell {
+    width: 18%;
+    height: 40px;
+}
+.edit-cell:last-child {
+    width: 10%;
+}
+
+.edit-cell {
+    display: inline-block;
+}
+
+.hide {
+    display: none;
+}
+
+tr.edit-row {
+    display: none;
+}
+tr.edit-row.show {
+    display: table-row;
+}
+
 form {
     display: inline-block;
     width: 100%;

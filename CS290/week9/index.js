@@ -33,20 +33,25 @@ app.get('/', (req,res,next) => {
 });
 
 app.get('/insert', (req,res,next) => {
-    // let context = {};
     pool.query("INSERT INTO tracker (`name`,`reps`,`weight`,`date`,`unit`) VALUES (?, ? , ? , ?, ?)", 
     [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.unit], (err, result) => {
         if(err){
             next(err);
             return;
         }
-        // context.insertResult = JSON.stringify(result);
-        res.redirect('..');
+        let context = {};
+        pool.query('SELECT * FROM tracker', (err, rows, fields) => {
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = rows;
+            res.send(context);
+        });
     });
 });
 
 app.get('/safe-update', (req,res,next) => {
-    let context = {};
     pool.query("SELECT * FROM tracker WHERE id=?", [req.query.id], (err, result) => {
         if(err){
             next(err);
@@ -54,18 +59,49 @@ app.get('/safe-update', (req,res,next) => {
         }
         if(result.length == 1){
             var curVals = result[0];
-            pool.query("UPDATE tracker SET name=?, done=?, due=? WHERE id=? ",
-            [req.query.name || curVals.name, req.query.done || curVals.done, req.query.due || curVals.due, req.query.id],
+            pool.query("UPDATE tracker SET name=?, reps=?, weight=?, date=?, unit=? WHERE id=? ",
+            [   req.query.name || curVals.name,
+                req.query.reps || curVals.reps,
+                req.query.weight || curVals.weight,
+                req.query.date || curVals.date,
+                req.query.unit || curVals.unit,
+                req.query.id
+            ],
             (err, result) => {
                 if(err){
                     next(err);
                     return;
                 }
-                context.results = "Updated " + result.changedRows + " rows.";
-                res.render('home',context);
+                let context = {};
+                pool.query('SELECT * FROM tracker', (err, rows, fields) => {
+                    if(err){
+                        next(err);
+                        return;
+                    }
+                    context.results = rows;
+                    res.send(context);
+                });
             });
         }
     });
+});
+
+app.get('/delete', (req,res,next) => {
+    pool.query("DELETE FROM tracker WHERE id=?", [req.query.id], (err) => {
+        if(err) {
+            next(err);
+            return;
+        }
+        let context = {};
+        pool.query('SELECT * FROM tracker', (err, rows, fields) => {
+            if(err){
+                next(err);
+                return;
+            }
+            context.results = rows;
+            res.send(context);
+        });
+    })
 });
 
 app.get('/reset-table', (req,res,next) => {
@@ -82,8 +118,8 @@ app.get('/reset-table', (req,res,next) => {
             if (err) {
                 console.log(err);
             }
-            context.results = "Table reset";
-            res.render('home',context);
+            context.results = [];
+            res.send(context);
         })
     });
 });
