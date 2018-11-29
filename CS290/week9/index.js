@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 3333);
+app.set('port', 3232);
 app.use(express.static('public'));
 
 app.get('/', (req,res,next) => {
