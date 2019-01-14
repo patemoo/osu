@@ -18,4 +18,4 @@ mergetime.o: mergetime.cpp
 	g++ -c -std=c++11 mergetime.cpp
 
 clean:
-	rm *.o mergesort insertsort
+	rm *.o mergesort insertsort insertTime mergeTime
