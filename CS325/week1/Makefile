@@ -6,10 +6,10 @@ output: insertsort.o mergesort.o inserttime.o mergetime.o
 	g++ mergetime.o -o mergeTime
 
 insertsort.o: insertsort.cpp
-    g++ -c -std=c++11 insertsort.cpp
+	g++ -c -std=c++11 insertsort.cpp
 
 mergesort.o: mergesort.cpp
-    g++ -c -std=c++11 mergesort.cpp
+	g++ -c -std=c++11 mergesort.cpp
 
 inserttime.o: inserttime.cpp
 	g++ -c -std=c++11 inserttime.cpp
