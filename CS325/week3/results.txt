@@ -1,0 +1,13 @@
+Test case: 1
+Total price: 72
+Member items
+1: 
+
+Test case: 2
+Total price: 539
+Member items
+1: 
+2: 
+3: 
+4: 
+
