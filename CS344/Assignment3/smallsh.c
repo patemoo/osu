@@ -27,6 +27,8 @@ void handle_SIGTSTP(int signo)
 	char* enterMessage = "Entering foreground-only mode (& is now ignored)";
     write(STDOUT_FILENO, enterMessage, 50);
 
+	pause();
+
 	char* exitMessage = "Exiting foreground-only mode";
     write(STDOUT_FILENO, exitMessage, 30);
 }
@@ -37,6 +39,8 @@ int main()
 	int childStatus = 0;
 	int saved_stdout;
 	int saved_stdin;
+
+	bool canRunInBackground = true;
 
 	// Signal code:
 	// Initialize SIGINT_action struct
@@ -233,7 +237,7 @@ int main()
 					default:
 						// In the parent process
 							
-						if (inputObj->runInBackground)
+						if (canRunInBackground && inputObj->runInBackground)
 						{
 							// run in the background.
 							printf("background pid is %d\n", spawnPid);
