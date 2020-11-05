@@ -9,6 +9,9 @@
 #include <unistd.h>
 #include "userInput.h"
 
+/**
+ * SIGINT handler
+ */
 void handle_SIGINT(int signo)
 {
 	char message[23];
@@ -16,35 +19,38 @@ void handle_SIGINT(int signo)
 	write(STDOUT_FILENO, message, 23);
 }
 
+/**
+ * SIGTSTP handler
+ */
 void handle_SIGTSTP(int signo)
 {
 	char* message = "Entering foreground-only mode (& is now ignored)";
-        write(STDOUT_FILENO, message, 50);
+    write(STDOUT_FILENO, message, 50);
 }
 
 int main()
 {
-	// Initialize child status var
+	// Initialize program vars
 	int childStatus = 0;
 	int saved_stdout;
 	int saved_stdin;
 
-	// Setup signal code:
+	// Signal code:
 	// Initialize SIGINT_action struct
 	struct sigaction SIGINT_action = {0};
-
+	// Add handler
 	SIGINT_action.sa_handler = handle_SIGINT;
-	// Block SIGINT signal
+	// Block other signals
 	sigfillset(&SIGINT_action.sa_mask);
-
 	sigaction(SIGINT, &SIGINT_action, NULL);
 
 	// Initialize SIGTSTP_action struct
 	struct sigaction SIGTSTP_action = {0};
-
+	// Add handler
 	SIGTSTP_action.sa_handler = handle_SIGTSTP;
-        // Block signals
-        sigfillset(&SIGINT_action.sa_mask);
+    // Block signals
+    sigfillset(&SIGTSTP_action.sa_mask);
+	sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 
 	// Create bool used to exit shell.
 	bool exitShell = false;
@@ -55,7 +61,7 @@ int main()
 		
 		// Print shell prompt
 		printf(": ");
-		fflush(stdout);		
+		fflush(stdout);
 
 		// Get user input.
 		// Store user input command values in a struct
@@ -69,12 +75,11 @@ int main()
 		char* lastArg = inputObj->argv[lastArgIndex];
 		lastArg[strcspn(lastArg, "\n")] = 0;
 
-		// expand
+		// Expand code
 		for (int i = 1; i < inputObj->argvLength; i++)
 		{
-		//	if (strcspn(inputObj->argv[i]))
+			// if (strcspn(inputObj->argv[i]))
 		}
-
 
 		// Create a command var to comapre against.
 		char* command = inputObj->command;
@@ -199,59 +204,57 @@ int main()
 				}				
 			}
 
-		if (!fileError)
-		{
-			// Fork a new process to run external command.			
-			pid_t spawnPid = fork();
-
-			switch(spawnPid)
+			if (!fileError)
 			{
-				case -1:
-					// error
-					perror("fork()\n");
-					exit(1);
-					break;
-				case 0:
-					// update signal before exec
-					SIGINT_action.sa_handler = SIG_IGN;
-					SIGTSTP_action.sa_handler = SIG_IGN;
+				// Fork a new process to run external command.			
+				pid_t spawnPid = fork();
 
-					// In the child process
-					execvp(command, inputObj->argv);		
-					
-					perror(command);
-					exit(2);
-					break;
-				default:
-					// In the parent process
+				switch(spawnPid)
+				{
+					case -1:
+						// error
+						perror("fork()\n");
+						exit(1);
+						break;
+					case 0:
+						// update signal before exec
+						SIGINT_action.sa_handler = SIG_IGN;
+						SIGTSTP_action.sa_handler = SIG_IGN;
+
+						// In the child process
+						execvp(command, inputObj->argv);		
 						
-					if (inputObj->runInBackground)
-					{
-						// run in the background.
-						printf("background pid is %d\n", spawnPid);
-						fflush(stdout);
-						
-					}
-					else
-					{
-						spawnPid = waitpid(spawnPid, &childStatus, 0);
-						
-						// restore stdout
-						dup2(saved_stdout, 1);
-						dup2(saved_stdin, 0);
-					}
-					break;
+						perror(command);
+						exit(2);
+						break;
+					default:
+						// In the parent process
+							
+						if (inputObj->runInBackground)
+						{
+							// run in the background.
+							printf("background pid is %d\n", spawnPid);
+							fflush(stdout);
+						}
+						else
+						{
+							spawnPid = waitpid(spawnPid, &childStatus, 0);
+							
+							// restore stdout
+							dup2(saved_stdout, 1);
+							dup2(saved_stdin, 0);
+						}
+						break;
+				}
 
 			}
+		}
 
-		}
-		}
+		// todo: check for background processes.
 
 		// restore stdout
-                dup2(saved_stdout, 1);
-                dup2(saved_stdin, 0);
-	
-		// todo: check for background processes.
+        dup2(saved_stdout, 1);
+        dup2(saved_stdin, 0);
 	}
 	
 	return 0;
