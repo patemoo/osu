@@ -27,8 +27,6 @@ void handle_SIGTSTP(int signo)
 	char* enterMessage = "Entering foreground-only mode (& is now ignored)";
     write(STDOUT_FILENO, enterMessage, 50);
 
-	pause();
-
 	char* exitMessage = "Exiting foreground-only mode";
     write(STDOUT_FILENO, exitMessage, 30);
 }
@@ -54,7 +52,7 @@ int main()
 	// Add handler
 	SIGTSTP_action.sa_handler = handle_SIGTSTP;
     // Block signals
-    sigfillset(&SIGTSTP_action.sa_mask);
+    // sigfillset(&SIGTSTP_action.sa_mask);
 	sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 
 	// Create bool used to exit shell.
