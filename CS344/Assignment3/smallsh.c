@@ -24,13 +24,13 @@ void handle_SIGINT(int signo)
  */
 void handle_SIGTSTP(int signo)
 {
-	char* message = "Entering foreground-only mode (& is now ignored)";
-    write(STDOUT_FILENO, message, 50);
+	char* enterMessage = "Entering foreground-only mode (& is now ignored)";
+    write(STDOUT_FILENO, enterMessage, 50);
 
 	pause();
 
-	char* message = "Exiting foreground-only mode";
-    write(STDOUT_FILENO, message, 30);
+	char* exitMessage = "Exiting foreground-only mode";
+    write(STDOUT_FILENO, exitMessage, 30);
 }
 
 int main()
