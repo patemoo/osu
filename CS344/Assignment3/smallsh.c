@@ -14,9 +14,9 @@
  */
 void handle_SIGINT(int signo)
 {
-	char message[24];
+	char message[25];
 	sprintf(message, "terminated by signal %d\n", signo);
-	write(STDOUT_FILENO, message, 24);
+	write(STDOUT_FILENO, message, 25);
 }
 
 /**
@@ -37,12 +37,12 @@ void handle_SIGTSTP(int signo)
  */
 void handle_SIGCHLD(int signo)
 {
+	int status;
+	pid_t childPid = wait(&status);
 
-	pid_t childPid = getpid();
-
-	char message[51];
+	char message[52];
 	sprintf(message, "background pid %d is done: terminated by signal %d\n", childPid, signo);
-	write(STDOUT_FILENO, message, 51);
+	write(STDOUT_FILENO, message, 52);
 }
 
 int main()
