@@ -72,7 +72,7 @@ int main()
 	// Initialize SIGCHLD_action struct
 	struct sigaction SIGCHLD_action = {0};
 	// Add handler
-	SIGCHLD_action.sa_handler = handle_SIGCHLD;
+	SIGCHLD_action.sa_handler = 0;
 	// Block signals
 	sigfillset(&SIGCHLD_action.sa_mask);
 	sigaction(SIGCHLD, &SIGCHLD_action, NULL);
@@ -245,6 +245,11 @@ int main()
 						// update signal before exec
 						SIGINT_action.sa_handler = SIG_IGN;
 						SIGTSTP_action.sa_handler = SIG_IGN;
+
+						if (inputObj->runInBackground)
+						{
+							SIGCHLD_action.sa_handler = handle_SIGCHLD;
+						}
 
 						// In the child process
 						execvp(command, inputObj->argv);
