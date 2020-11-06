@@ -40,9 +40,9 @@ void handle_SIGCHLD(int signo)
 	int status;
 	int childPid = wait(&status);
 
-	char message[23];
+	char message[50];
 	sprintf(message, "background pid %d is done: terminated by signal %d\n", childPid, signo);
-	write(STDOUT_FILENO, message, 54);
+	write(STDOUT_FILENO, message, 50);
 }
 
 int main()
@@ -69,13 +69,13 @@ int main()
     // sigfillset(&SIGTSTP_action.sa_mask);
 	sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 
-	// Initialize SIGCHLD_action struct
-	struct sigaction SIGCHLD_action = {0};
-	// Add handler
-	SIGCHLD_action.sa_handler = handle_SIGCHLD;
-    // Block signals
-    // sigfillset(&SIGCHLD_action.sa_mask);
-	sigaction(SIGCHLD, &SIGCHLD_action, NULL);
+	// // Initialize SIGCHLD_action struct
+	// struct sigaction SIGCHLD_action = {0};
+	// // Add handler
+	// SIGCHLD_action.sa_handler = handle_SIGCHLD;
+    // // Block signals
+    // // sigfillset(&SIGCHLD_action.sa_mask);
+	// sigaction(SIGCHLD, &SIGCHLD_action, NULL);
 
 	// Create bool used to exit shell.
 	bool exitShell = false;
@@ -260,6 +260,14 @@ int main()
 							// run in the background.
 							printf("background pid is %d\n", spawnPid);
 							fflush(stdout);
+
+							// Initialize SIGCHLD_action struct
+							struct sigaction SIGCHLD_action = {0};
+							// Add handler
+							SIGCHLD_action.sa_handler = handle_SIGCHLD;
+							// Block signals
+							// sigfillset(&SIGCHLD_action.sa_mask);
+							sigaction(SIGCHLD, &SIGCHLD_action, NULL);
 						}
 						else
 						{
