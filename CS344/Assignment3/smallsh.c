@@ -24,12 +24,25 @@ void handle_SIGINT(int signo)
  */
 void handle_SIGTSTP(int signo)
 {
-			char* enterMessage = "Entering foreground-only mode (& is now ignored)";
-    		write(STDOUT_FILENO, enterMessage, 50);
+	char* enterMessage = "Entering foreground-only mode (& is now ignored)";
+	write(STDOUT_FILENO, enterMessage, 50);
 
 		
-				char* exitMessage = "Exiting foreground-only mode";
-    			write(STDOUT_FILENO, exitMessage, 30);
+	char* exitMessage = "Exiting foreground-only mode";
+	write(STDOUT_FILENO, exitMessage, 30);
+}
+
+/**
+ * SIGCHLD handler
+ */
+void handle_SIGCHLD(int signo)
+{
+	int status;
+	int childPid = wait(&status);
+
+	char message[23];
+	sprintf(message, "background pid %d is done: terminated by signal %d\n", childPid, signo);
+	write(STDOUT_FILENO, message, 54);
 }
 
 int main()
@@ -38,8 +51,6 @@ int main()
 	int childStatus = 0;
 	int saved_stdout;
 	int saved_stdin;
-
-	bool canRunInBackground = true;
 
 	// Signal code:
 	// Initialize SIGINT_action struct
@@ -57,6 +68,14 @@ int main()
     // Block signals
     // sigfillset(&SIGTSTP_action.sa_mask);
 	sigaction(SIGTSTP, &SIGTSTP_action, NULL);
+
+	// Initialize SIGCHLD_action struct
+	struct sigaction SIGCHLD_action = {0};
+	// Add handler
+	SIGCHLD_action.sa_handler = handle_SIGCHLD;
+    // Block signals
+    // sigfillset(&SIGCHLD_action.sa_mask);
+	sigaction(SIGCHLD, &SIGCHLD_action, NULL);
 
 	// Create bool used to exit shell.
 	bool exitShell = false;
@@ -229,9 +248,6 @@ int main()
 
 						// In the child process
 						execvp(command, inputObj->argv);
-
-						printf("after execvp runs\n");
-						exit(1);
 						
 						perror(command);
 						exit(2);
@@ -239,7 +255,7 @@ int main()
 					default:
 						// In the parent process
 							
-						if (canRunInBackground && inputObj->runInBackground)
+						if (inputObj->runInBackground)
 						{
 							// run in the background.
 							printf("background pid is %d\n", spawnPid);
@@ -258,8 +274,6 @@ int main()
 
 			}
 		}
-
-		// todo: check for background processes.
 
 		// restore stdout
         dup2(saved_stdout, 1);
