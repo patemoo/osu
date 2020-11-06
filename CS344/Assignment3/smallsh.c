@@ -231,6 +231,7 @@ int main()
 						execvp(command, inputObj->argv);
 
 						printf("after execvp runs\n");
+						exit(1);
 						
 						perror(command);
 						exit(2);
