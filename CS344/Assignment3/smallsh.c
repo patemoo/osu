@@ -103,7 +103,7 @@ int main()
 		// Expand code
 		for (int i = 1; i < inputObj->argvLength; i++)
 		{
-			inputObj->argv[i][strcspn(inputObj->argv[i], "$$")] = getpid();
+			// todo
 		}
 
 		// Create a command var to comapre against.
