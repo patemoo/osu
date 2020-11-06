@@ -155,17 +155,17 @@ int main()
 		{
 		bool fileError = false;
 				
-			if (inputObj->runInBackground)
-			{
-				if (!inputObj->inputFile)
-				{
-					inputObj->inputFile = "./dev/null";
-				}
-				if (!inputObj->outputFile)
-				{
-					inputObj->outputFile = "./dev/null";
-				}
-			}
+			// if (inputObj->runInBackground)
+			// {
+			// 	if (!inputObj->inputFile)
+			// 	{
+			// 		inputObj->inputFile = "./dev/null";
+			// 	}
+			// 	if (!inputObj->outputFile)
+			// 	{
+			// 		inputObj->outputFile = "./dev/null";
+			// 	}
+			// }
 
 			// Handle input file
 			if (inputObj->inputFile)
