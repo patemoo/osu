@@ -24,13 +24,12 @@ void handle_SIGINT(int signo)
  */
 void handle_SIGTSTP(int signo)
 {
-	char* enterMessage = "Entering foreground-only mode (& is now ignored)";
-    write(STDOUT_FILENO, enterMessage, 50);
+			char* enterMessage = "Entering foreground-only mode (& is now ignored)";
+    		write(STDOUT_FILENO, enterMessage, 50);
 
-	pause();
-
-	char* exitMessage = "Exiting foreground-only mode";
-    write(STDOUT_FILENO, exitMessage, 30);
+		
+				char* exitMessage = "Exiting foreground-only mode";
+    			write(STDOUT_FILENO, exitMessage, 30);
 }
 
 int main()
@@ -39,6 +38,8 @@ int main()
 	int childStatus = 0;
 	int saved_stdout;
 	int saved_stdin;
+
+	bool canRunInBackground = true;
 
 	// Signal code:
 	// Initialize SIGINT_action struct
@@ -54,7 +55,7 @@ int main()
 	// Add handler
 	SIGTSTP_action.sa_handler = handle_SIGTSTP;
     // Block signals
-    sigfillset(&SIGTSTP_action.sa_mask);
+    // sigfillset(&SIGTSTP_action.sa_mask);
 	sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 
 	// Create bool used to exit shell.
@@ -227,7 +228,9 @@ int main()
 						SIGTSTP_action.sa_handler = SIG_IGN;
 
 						// In the child process
-						execvp(command, inputObj->argv);		
+						execvp(command, inputObj->argv);
+
+						printf("after execvp runs\n");
 						
 						perror(command);
 						exit(2);
@@ -235,7 +238,7 @@ int main()
 					default:
 						// In the parent process
 							
-						if (inputObj->runInBackground)
+						if (canRunInBackground && inputObj->runInBackground)
 						{
 							// run in the background.
 							printf("background pid is %d\n", spawnPid);
