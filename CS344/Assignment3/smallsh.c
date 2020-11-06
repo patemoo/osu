@@ -68,6 +68,14 @@ int main()
     // sigfillset(&SIGTSTP_action.sa_mask);
 	sigaction(SIGTSTP, &SIGTSTP_action, NULL);
 
+	// Initialize SIGCHLD_action struct
+	struct sigaction SIGCHLD_action = {0};
+	// Add handler
+	SIGCHLD_action.sa_handler = handle_SIGCHLD;
+	// Block signals
+	sigfillset(&SIGCHLD_action.sa_mask);
+	sigaction(SIGCHLD, &SIGCHLD_action, NULL);
+
 	// Create bool used to exit shell.
 	bool exitShell = false;
 	
@@ -248,14 +256,6 @@ int main()
 							
 						if (inputObj->runInBackground)
 						{
-							// Initialize SIGCHLD_action struct
-							struct sigaction SIGCHLD_action = {0};
-							// Add handler
-							SIGCHLD_action.sa_handler = handle_SIGCHLD;
-							// Block signals
-							sigfillset(&SIGCHLD_action.sa_mask);
-							sigaction(SIGCHLD, &SIGCHLD_action, NULL);
-
 							// run in the background.
 							printf("background pid is %d\n", spawnPid);
 							fflush(stdout);
