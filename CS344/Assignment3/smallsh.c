@@ -37,7 +37,8 @@ void handle_SIGTSTP(int signo)
  */
 void handle_SIGCHLD(int signo)
 {
-	pid_t childPid = wait(NULL);
+
+	pid_t childPid = getpid();
 
 	char message[51];
 	sprintf(message, "background pid %d is done: terminated by signal %d\n", childPid, signo);
