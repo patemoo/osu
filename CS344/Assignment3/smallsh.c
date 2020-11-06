@@ -24,13 +24,12 @@ void handle_SIGINT(int signo)
  */
 void handle_SIGTSTP(int signo)
 {
-	char* enterMessage = "Entering foreground-only mode (& is now ignored)";
-    write(STDOUT_FILENO, enterMessage, 50);
+			char* enterMessage = "Entering foreground-only mode (& is now ignored)";
+    		write(STDOUT_FILENO, enterMessage, 50);
 
-	pause();
-
-	char* exitMessage = "Exiting foreground-only mode";
-    write(STDOUT_FILENO, exitMessage, 30);
+		
+				char* exitMessage = "Exiting foreground-only mode";
+    			write(STDOUT_FILENO, exitMessage, 30);
 }
 
 int main()
@@ -229,7 +228,9 @@ int main()
 						SIGTSTP_action.sa_handler = SIG_IGN;
 
 						// In the child process
-						execvp(command, inputObj->argv);		
+						execvp(command, inputObj->argv);
+
+						printf("after execvp runs\n");
 						
 						perror(command);
 						exit(2);
