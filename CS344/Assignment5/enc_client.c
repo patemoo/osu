@@ -6,15 +6,6 @@
 #include <sys/socket.h> // send(),recv()
 #include <netdb.h>      // gethostbyname()
 
-
-// todo: update program comments
-/**
-* Client code
-* 1. Create a socket and connect to the server specified in the command arugments.
-* 2. Prompt the user for input and send that input as a message to the server.
-* 3. Print the message received from the server and exit the program.
-*/
-
 // Error function used for reporting issues
 void error(const char *msg) { 
     perror(msg); 
@@ -46,13 +37,26 @@ void setupAddressStruct(struct sockaddr_in* address,
         hostInfo->h_length);
 }
 
+/**
+ * Encrypt Client
+ * 1. Read input from plaintext and key argument paths
+ * 2. Check for valid key length
+ * 3. Check for bad characters within plaintext input
+ * 4. Create a socket and connect to the server specified in the command arugments.
+ * 5. Print the message received from the server and exit the program.
+ */
 int main(int argc, char *argv[]) {
     int socketFD, portNumber, charsWritten, charsRead;
     struct sockaddr_in serverAddress;
+    
+    // Define characters that should not be allowed in the plaintext input.
     char* badCharacters = "!@#$%^&*()-+=_";
 
+    // Define variables to hold the plaintext and key file paths.
     FILE* plaintext,* key;
 
+    // Create buffers used to read plaintext and key input
+    // and to send data over the socket to the server
     char textBuffer[70000];
     char keyBuffer[70000];
     char socketBuffer[140000];
@@ -67,13 +71,15 @@ int main(int argc, char *argv[]) {
     plaintext = fopen(argv[1], "r");
     if (plaintext == NULL)
     {
-        // error
+        // Throw error if file does not open.
+        error("Error: opening plaintext file path");
     }
 
     key = fopen(argv[2], "r");
     if (key == NULL)
     {
-        // error
+        // Throw error if file does not open.
+        error("Error: opeing key file path");
     }
 
     // Clear out buffer arrays
@@ -88,13 +94,16 @@ int main(int argc, char *argv[]) {
     textBuffer[strcspn(textBuffer, "\n")] = '\0';
     keyBuffer[strcspn(keyBuffer, "\n")] = '\0';
 
-    // check value and key length
+    // Check value compared to key length
     if (strlen(textBuffer) > strlen(keyBuffer))
     {
+        // Throw error if the key length is less than the plaintext length
         error("Error: key is too short.");
     }
 
-    // check for bad characters
+    // Check for bad characters within the plaintext input
+    // For each bad character loop through the characters of the plaintext
+    // if a bad character is found throw an error.
     for (int i = 0; i < strlen(badCharacters); i++)
     {
         for (int j = 0; j < strlen(textBuffer); j++)
@@ -106,7 +115,11 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // construct socketBuffer:
+    // Construct the socketBuffer string:
+    // Pass a comma separated string using the following pattern:
+    // First token is the client type.
+    // Second token is the plaintext input.
+    // Third toekn is the key input.
     strcat(socketBuffer, "enc,");
     strcat(socketBuffer, textBuffer);
     strcat(socketBuffer, ",");

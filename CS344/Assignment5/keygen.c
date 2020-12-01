@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "ascii_util.h"
 
 /**
  * Get character
@@ -23,6 +24,29 @@ char getCharacter(int value)
         default:
             // Add value to 65 to get correct ASCII character.
             result = value + 65;
+    }
+
+    return result;
+}
+
+/**
+ * Get value
+ * Takes a capital ASCII letter character
+ * Return 26 if argument equals space character value
+ * For all other capital letter characters, reaturn the corresponding value
+ * after subtracting 65 to result with a zero indexed value
+ */
+int getValue(char character)
+{
+    int result;
+
+    switch ((int)character)
+    {
+        case 32:
+            result = 26;
+            break;
+        default:
+            result = (int)character - 65;
     }
 
     return result;

@@ -6,15 +6,6 @@
 #include <sys/socket.h> // send(),recv()
 #include <netdb.h>      // gethostbyname()
 
-
-// todo: update program comments
-/**
-* Client code
-* 1. Create a socket and connect to the server specified in the command arugments.
-* 2. Prompt the user for input and send that input as a message to the server.
-* 3. Print the message received from the server and exit the program.
-*/
-
 // Error function used for reporting issues
 void error(const char *msg) { 
     perror(msg); 
@@ -46,12 +37,22 @@ void setupAddressStruct(struct sockaddr_in* address,
         hostInfo->h_length);
 }
 
+/**
+ * Decrypt Client
+ * 1. Read input from cipher and key argument paths
+ * 2. Check for valid key length
+ * 3. Create a socket and connect to the server specified in the command arugments.
+ * 4. Print the message received from the server and exit the program.
+ */
 int main(int argc, char *argv[]) {
     int socketFD, portNumber, charsWritten, charsRead;
     struct sockaddr_in serverAddress;
 
+    // Define variables to hold the cipher and key file paths.
     FILE* ciphertext,* key;
 
+    // Create buffers used to read cipher and key input
+    // and to send data over the socket to the server
     char cipherBuffer[70000];
     char keyBuffer[70000];
     char socketBuffer[140000];
@@ -66,13 +67,15 @@ int main(int argc, char *argv[]) {
     ciphertext = fopen(argv[1], "r");
     if (ciphertext == NULL)
     {
-        // error
+        // Throw error if file does not open.
+        error("Error: opening cipher file path");
     }
 
     key = fopen(argv[2], "r");
     if (key == NULL)
     {
-        // error
+        // Throw error if file does not open.
+        error("Error: opeing key file path");
     }
 
     // Clear out buffer arrays
@@ -90,10 +93,15 @@ int main(int argc, char *argv[]) {
     // check value and key length
     if (strlen(cipherBuffer) > strlen(keyBuffer))
     {
+        // Throw error if the key length is less than the plaintext length
         error("Error: key is too short.");
     }
 
-    // construct socketBuffer:
+    // Construct the socketBuffer string:
+    // Pass a comma separated string using the following pattern:
+    // First token is the client type.
+    // Second token is the cipher input.
+    // Third toekn is the key input.
     strcat(socketBuffer, "dec,");
     strcat(socketBuffer, cipherBuffer);
     strcat(socketBuffer, ",");
@@ -125,9 +133,9 @@ int main(int argc, char *argv[]) {
 
     // Get return message from server
     // Clear out the buffer again for reuse
-    memset(cipherBuffer, '\0', sizeof(cipherBuffer));
+    memset(cipherBuffer, '\0', 70000);
     // Read data from the socket, leaving \0 at end
-    charsRead = recv(socketFD, cipherBuffer, sizeof(cipherBuffer) - 1, 0); 
+    charsRead = recv(socketFD, cipherBuffer, 70000, 0); 
     if (charsRead < 0){
         error("CLIENT: ERROR reading from socket");
     }

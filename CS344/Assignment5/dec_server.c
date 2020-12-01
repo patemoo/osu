@@ -7,15 +7,13 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "ascii_util.h"
 
 // The allowed number of processes to run at one time.
 #define POOL_SIZE       5
 
 // Declare a semaphone
 sem_t* enc_sem;
-
-// semaphone count
-int sem_count = POOL_SIZE;
 
 /**
  * Get character
@@ -43,7 +41,11 @@ char getCharacter(int value)
 }
 
 /**
- * 
+ * Get value
+ * Takes a capital ASCII letter character
+ * Return 26 if argument equals space character value
+ * For all other capital letter characters, reaturn the corresponding value
+ * after subtracting 65 to result with a zero indexed value
  */
 int getValue(char character)
 {
@@ -60,6 +62,9 @@ int getValue(char character)
 
     return result;
 }
+
+// semaphone count
+int sem_count = POOL_SIZE;
 
 char* run_decrypt(char* cipher, char* key)
 {

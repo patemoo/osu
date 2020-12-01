@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "ascii_util.h"
 
 // The allowed number of processes to run at one time.
 #define POOL_SIZE       5
@@ -43,7 +44,11 @@ char getCharacter(int value)
 }
 
 /**
- * 
+ * Get value
+ * Takes a capital ASCII letter character
+ * Return 26 if argument equals space character value
+ * For all other capital letter characters, reaturn the corresponding value
+ * after subtracting 65 to result with a zero indexed value
  */
 int getValue(char character)
 {
@@ -79,43 +84,11 @@ char* run_encrypt(char* text, char* key)
         sum = textVal + keyVal;
         mod = sum % 27;
 
-        // printf("text: %d %c %d key: %d %c %d mod: %d %c\n", text[i], text[i], textVal, key[i], key[i], keyVal, mod, getCharacter(mod));
-
         result[i] = getCharacter(mod);
     }
 
     return result;
 }
-
-// char* run_decrypt(char* cipher, char* key)
-// {
-//     int length = strlen(cipher);
-//     char* result = malloc(sizeof(length * sizeof(char)));
-
-//     for (int i = 0; i < length; i++)
-//     {
-//         int cipherVal;
-//         int keyVal;
-//         int sub;
-//         int mod;
-
-//         cipherVal = getValue(cipher[i]);
-//         keyVal = getValue(key[i]);
-
-//         sub = cipherVal - keyVal;
-//         if (sub < 0)
-//         {
-//             sub += 27;
-//         }
-//         mod = sub % 27;
-
-//         printf("cipher: %d %c %d key: %d %c %d mod: %d %c\n", cipher[i], cipher[i], cipherVal, key[i], key[i], keyVal, mod, getCharacter(mod));
-
-//         result[i] = getCharacter(mod);
-//     }
-
-//     return result;
-// }
 
 // Error function used for reporting issues
 void error(const char *msg) {
@@ -242,14 +215,9 @@ int main(int argc, char *argv[]){
                     // do encrypt work here:
                     cipherBuffer = run_encrypt(textBuffer, keyBuffer);
 
-
-                    // char* decBuffer = run_decrypt(cipherBuffer, keyBuffer);
-
-        
-
                     // Send a Success message back to the client
                     charsRead = send(connectionSocket, 
-                                    cipherBuffer, 70000, 0); 
+                                    cipherBuffer, 69334, 0); 
                     if (charsRead < 0){
                         error("ERROR writing to socket");
                     }
