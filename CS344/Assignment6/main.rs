@@ -169,7 +169,7 @@ fn main() {
         let x = arc_x.lock().unwrap();
         let p = x[i].clone();
         // Pas this pointer to the new thread
-        let handle = thread::spawn(move || map_data(&p));
+        let handle = thread::spawn(move || reduce_data(&p));
         handles.push(handle);
     }
 
