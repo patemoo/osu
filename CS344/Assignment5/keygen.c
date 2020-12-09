@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "ascii_util.h"
 
 /**
  * Get character

@@ -7,7 +7,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "ascii_util.h"
 
 // The allowed number of processes to run at one time.
 #define POOL_SIZE       5
