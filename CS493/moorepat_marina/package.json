@@ -1,0 +1,20 @@
+{
+  "name": "moorepat_marina",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "@google-cloud/firestore": "^4.9.9",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "google-gax": "^1.6.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "deploy": "gcloud app deploy",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
